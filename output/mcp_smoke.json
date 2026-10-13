@@ -1,0 +1,77 @@
+{
+  "server": "campus-customs",
+  "config": ".mcp.json",
+  "database": "data/campus_customs_new.db",
+  "client": "Claude Code (desktop app), tools called over MCP stdio",
+  "tested_on": "2026-10-12",
+  "tests": [
+    {
+      "ticket": 101,
+      "prompt": "Use the campus-customs MCP tool check_stock to see if we have CC-TEE-WHITE in size S for ticket 101 (need 1)",
+      "tool": "check_stock",
+      "mcp_tool_id": "mcp__campus-customs__check_stock",
+      "arguments": {
+        "sku": "CC-TEE-WHITE",
+        "size": "S",
+        "qty_needed": 1
+      },
+      "output": {
+        "found": true,
+        "sku": "CC-TEE-WHITE",
+        "name": "Classic Bulldog Tee",
+        "size": "S",
+        "qty": 0,
+        "location": "Aisle B",
+        "in_stock": false,
+        "qty_needed": 1,
+        "can_fill": false,
+        "shortage": 1
+      },
+      "db_check": {
+        "query": "SELECT * FROM inventory WHERE sku='CC-TEE-WHITE' AND size='S';",
+        "db_row": {
+          "sku": "CC-TEE-WHITE",
+          "name": "Classic Bulldog Tee",
+          "size": "S",
+          "qty": 0,
+          "location": "Aisle B"
+        },
+        "matches": true
+      }
+    },
+    {
+      "ticket": 102,
+      "prompt": "Use the campus-customs MCP tool get_lease to look up lease 1 for the rent notice in ticket 102",
+      "tool": "get_lease",
+      "mcp_tool_id": "mcp__campus-customs__get_lease",
+      "arguments": {
+        "lease_id": 1
+      },
+      "output": {
+        "found": true,
+        "id": 1,
+        "space_name": "Chapel Street shop",
+        "landlord": "Elm City Properties",
+        "monthly_rent": 2400,
+        "next_due": "2026-09-02",
+        "notes": null,
+        "shop_today": "2026-08-31",
+        "days_until_due": 2,
+        "overdue": false
+      },
+      "db_check": {
+        "query": "SELECT * FROM leases WHERE id=1; SELECT date_today FROM desk;",
+        "db_row": {
+          "id": 1,
+          "space_name": "Chapel Street shop",
+          "landlord": "Elm City Properties",
+          "monthly_rent": 2400.0,
+          "next_due": "2026-09-02",
+          "notes": null,
+          "desk.date_today": "2026-08-31"
+        },
+        "matches": true
+      }
+    }
+  ]
+}

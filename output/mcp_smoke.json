@@ -3,7 +3,7 @@
   "config": ".mcp.json",
   "database": "data/campus_customs_new.db",
   "client": "Claude Code (desktop app), tools called over MCP stdio",
-  "tested_on": "2026-10-12",
+  "tested_on": "2026-10-12 (check_stock, get_lease) and 2026-10-13 (get_pricing)",
   "tests": [
     {
       "ticket": 101,
@@ -69,6 +69,42 @@
           "next_due": "2026-09-02",
           "notes": null,
           "desk.date_today": "2026-08-31"
+        },
+        "matches": true
+      }
+    },
+    {
+      "ticket": 103,
+      "prompt": "Use the campus-customs MCP tool get_pricing for CC-HOOD-NAVY with qty 20 for the bulk discount in ticket 103",
+      "tool": "get_pricing",
+      "mcp_tool_id": "mcp__campus-customs__get_pricing",
+      "arguments": {
+        "sku": "CC-HOOD-NAVY",
+        "qty": 20
+      },
+      "output": {
+        "found": true,
+        "sku": "CC-HOOD-NAVY",
+        "unit_cost": 22,
+        "list_price": 58,
+        "margin_per_unit": 36,
+        "margin_pct": 62.1,
+        "qty": 20,
+        "total_at_list": 1160,
+        "total_cost": 440
+      },
+      "db_check": {
+        "query": "SELECT * FROM pricing WHERE sku='CC-HOOD-NAVY';",
+        "db_row": {
+          "sku": "CC-HOOD-NAVY",
+          "unit_cost": 22.0,
+          "list_price": 58.0
+        },
+        "derived_checks": {
+          "margin_per_unit": "58 - 22 = 36",
+          "margin_pct": "36 / 58 = 62.1%",
+          "total_at_list": "20 x 58 = 1160",
+          "total_cost": "20 x 22 = 440"
         },
         "matches": true
       }
